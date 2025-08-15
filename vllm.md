@@ -4,6 +4,10 @@ sudo snap install astral-uv --classic
 
 conda install -c conda-forge libstdcxx-ng
 conda install -c conda-forge gxx_linux-64
+conda install gcc_linux-64=12.3.0 gxx_linux-64=12.3.0 -c conda-forge
+
+
+
 
 uv pip install --pre vllm==0.10.1+gptoss \
   --extra-index-url https://wheels.vllm.ai/gpt-oss/ \
@@ -18,13 +22,19 @@ export VLLM_ATTENTION_BACKEND=TRITON_ATTN_VLLM_V1
 vllm serve openai/gpt-oss-20b --async-scheduling
 
 
+
+
 export VLLM_ATTENTION_BACKEND=TRITON_ATTN_VLLM_V1
 vllm serve /home/rickychen/Desktop/llm/models/gpt-oss-20b \
-  --tensor-parallel-size 1 \
+  --tensor-parallel-size 2 \
   --port 30000 \
   --host 0.0.0.0 \
   --async-scheduling \
-  --gpu-memory-utilization 0.9
+  --gpu-memory-utilization 0.85 \
+  --max-num-seqs 24 \
+  --max-model-len 20480 \
+  --served-model-name gpt-oss
+
 
 -----
 # 添加NVIDIA Container Toolkit repository
